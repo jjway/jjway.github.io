@@ -16,6 +16,26 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/iconfont.css">
     <link rel="apple-touch-icon" href="https://unpkg.com/dmego-home-page@latest/apple-touch-icon.png">
     <link rel="icon" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
+    <style>
+        .ih-item .info .info-back {
+            /* * 1. 将背景改为半透明的白色。
+         * rgba(255, 255, 255, 0.1) 最后一个 0.1 代表 10% 的不透明度。
+         * 您可以按喜好调整这个值（例如 0.2 或 0.3）。
+        */
+            background: rgba(255, 255, 255, 0.1) !important;
+
+            /* * 2. 添加背景模糊滤镜。
+         * blur(10px) 中的 10px 是模糊半径, 您可以改成 5px, 20px 等。
+        */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* 兼容 Safari 浏览器 */
+
+            /* * 可选: 您可能还想加一个细微的边框来增强玻璃感
+        */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -29,7 +49,8 @@
                 <div class="panel-main__content">
                     <div class="ih-item circle effect right_to_left">
                         <a href="#" title="" class="blog-button">
-                            <div class="img"><img src="https://arthive.com/res/media/img/oy1000/work/b91/490534@2x.webp">
+                            <div class="img"><img
+                                    src="https://arthive.com/res/media/img/oy1000/work/b91/490534@2x.webp">
                             </div>
                             <div class="info iUp">
                                 <div class="info-back">
