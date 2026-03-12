@@ -35,10 +35,65 @@
         */
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
+        /* 顶部左侧时钟样式 */
+        .live-clock {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .live-clock:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: scale(1.02);
+        }
+
+        /* 鼠标水滴涟漪特效样式 */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            box-sizing: border-box;
+            z-index: 99999;
+            animation: ripple-animation 0.8s ease-out forwards;
+        }
+
+        @keyframes ripple-animation {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+                border: 2px solid rgba(255, 255, 255, 0.8);
+            }
+
+            100% {
+                transform: scale(3);
+                opacity: 0;
+                border: 2px solid rgba(255, 255, 255, 0);
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- 左上角显示时间的容器 -->
+    <div id="live-clock" class="live-clock"></div>
+
     <span class="mobile btn-mobile-menu">
         <i class="social iconfont icon-list btn-mobile-menu__icon"></i>
         <i class="social iconfont icon-angleup btn-mobile-close__icon hidden"></i>
@@ -61,7 +116,7 @@
                                     </h2>
                                     <p>
 
-                                        2025 · 勇敢
+                                        2026 · 勇敢
 
                                     </p>
                                 </div>
@@ -138,7 +193,8 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-cover--overlay cover-slate"></div>
+            <!-- 修改遮罩层，为了更好展示高质量图片，稍微降低默认背景的不透明度 -->
+            <div class="panel-cover--overlay cover-slate" style="background-color: rgba(61, 66, 96, 0.4);"></div>
         </div>
         <!-- <div class="beian iUp">
             <a class="icp" href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank">XXX</a>
@@ -152,7 +208,67 @@
         </div>
     </header>
     <script type="text/javascript" src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
-    <script type="text/javascript" src="./assets/json/images.json?cb=getBingImages"></script>
+
+    <!-- 使用保罗 API (动态随机获取高质量必应/唯美壁纸) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const panel = document.getElementById('panel');
+            if (panel) {
+                // 保罗 API：随机唯美/必应壁纸接口 (国内访问极速)
+                // const randomImageUrl = 'https://api.paugram.com/bing/';
+                const randomImageUrl = 'https://picsum.photos/1920/1080/';
+
+                const img = new Image();
+                img.onload = function () {
+                    panel.style.backgroundImage = `url('${randomImageUrl}')`;
+                    panel.style.backgroundSize = 'cover';
+                    panel.style.backgroundPosition = 'center center';
+                };
+                img.src = randomImageUrl;
+            }
+        });
+    </script>
+
+    <!-- 时钟更新脚本 -->
+    <script>
+        function updateClock() {
+            const clock = document.getElementById('live-clock');
+            if (!clock) return;
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN', { hour12: false });
+            const dateString = now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+            // 可以根据需求选择显示星期几
+            const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const dayString = days[now.getDay()];
+
+            clock.innerHTML = dateString + ' ' + dayString + ' ' + timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 鼠标水滴涟漪特效脚本
+        document.addEventListener('click', function (e) {
+            // 创建涟漪元素
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+
+            // 设置初始大小和位置（以鼠标点击位置为中心）
+            const size = 30; // 涟漪的初始直径
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+            ripple.style.left = (e.clientX - size / 2) + 'px';
+            ripple.style.top = (e.clientY - size / 2) + 'px';
+
+            // 将波纹添加到页面主体
+            document.body.appendChild(ripple);
+
+            // 动画结束后移除元素 (动画时间为0.8s)
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
+        });
+    </script>
 </body>
 
 </html>
